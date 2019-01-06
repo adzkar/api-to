@@ -8,7 +8,7 @@ class Tests extends Model
 {
   protected $table = 'tests';
   protected $primaryKey = 'id_test';
-  protected $fillable = ['title','information','start','end','id_com'];
+  protected $fillable = ['title','information','start','end','id_com','duration'];
 
   public $timestamps = false;
 

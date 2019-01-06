@@ -8,7 +8,7 @@ class Results extends Model
 {
   protected $table = 'results';
   protected $primaryKey = 'id_result';
-  protected $fillable = ['score','id_participant','id_test'];
+  protected $fillable = ['date','id_participant','id_test'];
 
   public $timestamps = false;
 
