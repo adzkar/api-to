@@ -9,6 +9,7 @@ class Committees extends Model
   protected $table = 'committees';
   protected $primaryKey = 'id_com';
   protected $fillable = ['name','username','password','id_ver'];
+  protected $hidden = ['password'];
 
   public $timestamps = false;
 

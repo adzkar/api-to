@@ -9,6 +9,7 @@ class Participants extends Model
   protected $table = 'participants';
   protected $primaryKey = 'id_participant';
   protected $fillable = ['first_name','last_name','username','password','id_ver','school'];
+  protected $hidden = ['password'];
 
   public $timestamps = false;
 

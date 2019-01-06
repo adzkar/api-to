@@ -12,7 +12,7 @@ class Answers extends Model
 
   public $timestamps = false;
 
-  public function test()
+  public function question()
   {
     return $this->belongsTo(Questions::class,'id_question','id_question');
   }
