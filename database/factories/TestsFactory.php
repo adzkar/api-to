@@ -18,5 +18,6 @@ $factory->define(App\Tests::class, function (Faker $faker) {
         'start' => $now,
         'end' => $twoHoursLater,
         'id_com' => $id_com,
+        'duration' => "2 Hours",
     ];
 });
