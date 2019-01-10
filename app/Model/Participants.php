@@ -2,10 +2,15 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Passport\HasApiTokens;
 
-class Participants extends Model
+class Participants extends Authenticatable
 {
+  use HasApiTokens, Notifiable;
+
   protected $table = 'participants';
   protected $primaryKey = 'id_participant';
   protected $fillable = ['first_name','last_name','username','password','id_ver','school'];

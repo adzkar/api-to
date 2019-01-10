@@ -2,10 +2,15 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Passport\HasApiTokens;
 
-class Committees extends Model
+class Committees extends Authenticatable
 {
+  use HasApiTokens, Notifiable;
+
   protected $table = 'committees';
   protected $primaryKey = 'id_com';
   protected $fillable = ['name','username','password','id_ver'];
