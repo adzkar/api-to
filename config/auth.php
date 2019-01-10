@@ -45,6 +45,21 @@ return [
             'driver' => 'token',
             'provider' => 'users',
         ],
+
+        'admin' => [
+            'driver' => 'passport',
+            'provider' => 'admins',
+        ],
+
+        'com' => [
+            'driver' => 'passport',
+            'provider' => 'coms',
+        ],
+
+        'par' => [
+            'driver' => 'passport',
+            'provider' => 'pars',
+        ],
     ],
 
     /*
@@ -68,6 +83,21 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
+        ],
+
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Admin::class,
+        ],
+
+        'coms' => [
+            'driver' => 'eloquent',
+            'model' => App\Committees::class,
+        ],
+
+        'pars' => [
+            'driver' => 'eloquent',
+            'model' => App\Participants::class,
         ],
 
         // 'users' => [
