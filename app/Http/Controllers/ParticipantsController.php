@@ -29,11 +29,13 @@ class ParticipantsController extends Controller
                ]);
          if($com)
             return response()->json([
-              'status' => 'Committees Created'
+              'message' => 'Committees Created',
+              'status' => true,
             ]);
           else
             return response()->json([
-              'error' => 'Something went wrong'
+              'error' => 'Something went wrong',
+              'status' => false
             ], 500);
       } else {
           return response()->json([

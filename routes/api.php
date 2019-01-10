@@ -20,6 +20,17 @@ Route::prefix('admin')->group(function() {
   Route::middleware('auth:admin')->group(function() {
     Route::get('detail','AdminController@detail');
     Route::get('logout','AdminController@logout');
+
+    Route::get('verification','VerificationController@getAll');
+
+    Route::prefix('verification')->group(function() {
+      Route::post('add', 'VerificationController@add');
+      Route::get('edit/{id?}', 'VerificationController@getByNum');
+      Route::get('find/{id?}', 'VerificationController@findById');
+      Route::post('update/{id?}', 'VerificationController@update');
+      Route::get('delete/{id?}', 'VerificationController@delete');
+    });
+
   });
 
 });
