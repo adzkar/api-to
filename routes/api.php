@@ -13,6 +13,37 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('admin')->group(function() {
+
+  Route::post('login','AdminController@login');
+
+  Route::middleware('auth:admin')->group(function() {
+    Route::get('detail','AdminController@detail');
+    Route::get('logout','AdminController@logout');
+  });
+
+});
+
+Route::prefix('com')->group(function() {
+
+  Route::post('register','CommitteesController@register');
+  Route::post('login','CommitteesController@login');
+
+  Route::middleware('auth:com')->group(function() {
+    Route::get('detail','CommitteesController@detail');
+    Route::get('logout','CommitteesController@logout');
+  });
+
+});
+
+Route::prefix('par')->group(function() {
+
+  Route::post('register','ParticipantsController@register');
+  Route::post('login','ParticipantsController@login');
+
+  Route::middleware('auth:par')->group(function() {
+    Route::get('detail','ParticipantsController@detail');
+    Route::get('logout','ParticipantsController@logout');
+  });
+
 });
