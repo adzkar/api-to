@@ -56,6 +56,7 @@ Route::prefix('admin')->group(function() {
 
 });
 
+
 Route::prefix('com')->group(function() {
 
   Route::post('register','CommitteesController@register');
@@ -64,9 +65,13 @@ Route::prefix('com')->group(function() {
   Route::middleware('auth:com')->group(function() {
     Route::get('detail','CommitteesController@detail');
     Route::get('logout','CommitteesController@logout');
+
+    
+
   });
 
 });
+
 
 Route::prefix('par')->group(function() {
 

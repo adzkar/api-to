@@ -52,10 +52,10 @@ class ParticipantsController extends Controller
       $this->validate($req, [
         'first_name' => 'required|string|max:20|min:1',
         'last_name' => 'required|string|max:20|min:1',
-        'username' => 'required|string|max:20|min:1|unique:committees',
+        'username' => 'required|string|max:20|min:1|unique:participants',
         'password' => 'required|min:6',
         'school' => 'required',
-        'code' => 'required'
+        'code' => 'required',
       ]);
       // Get verification id
       $ver = Verification::where(['code' => $req->code,'status' => 'p'])
@@ -72,12 +72,12 @@ class ParticipantsController extends Controller
          if($com)
             return response()->json([
               'message' => 'Participant Created',
-              'status' => true,
+              'success' => true,
             ]);
           else
             return response()->json([
               'error' => 'Something went wrong',
-              'status' => false
+              'success' => false
             ], 500);
       } else {
           return response()->json([
@@ -103,11 +103,13 @@ class ParticipantsController extends Controller
           $token = $com->createToken('Committees Token')
                        ->accessToken;
           return response()->json([
+            'success' => true,
             'token' => $token,
           ]);
       } else
           return response()->json([
-                  'error' => 'Invalid login'
+                  'error' => 'Invalid login',
+                  'success' => false,
                 ], 401);
     }
 
@@ -124,11 +126,11 @@ class ParticipantsController extends Controller
       if($revoke)
         return response()->json([
           'message' => 'Successfully logged out',
-          'status' => true,
+          'success' => true,
         ]);
       return response()->json([
         'message' => 'Unsuccessfully logged out',
-        'status' => false,
+        'success' => false,
       ]);
     }
 

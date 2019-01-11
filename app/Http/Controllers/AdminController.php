@@ -23,10 +23,12 @@ class AdminController extends Controller
         $token = $admin->createToken('Admin Token')
                        ->accessToken;
         return response()->json([
+          'success' => true,
           'token' => $token,
         ]);
       }
       return response()->json([
+        'success' => true,
         'error' => 'UnAuthorized',
       ], 401);
     }
@@ -38,13 +40,13 @@ class AdminController extends Controller
                      ->revoke();
       if($revoke)
         return response()->json([
+          'success' => true,
           'message' => 'Successfully logged out',
-          'status' => true,
         ]);
       return response()->json([
+        'success' => false,
         'message' => 'Unsuccessfully logged out',
-        'status' => false,
-      ]);
+      ], 500);
     }
 
     public function detail()

@@ -68,7 +68,7 @@ class CommitteesController extends Controller
                ]);
          if($com)
             return response()->json([
-              'status' => 'Committees Created'
+              'message' => 'Committees Created'
             ]);
           else
             return response()->json([
@@ -119,11 +119,11 @@ class CommitteesController extends Controller
       if($revoke)
         return response()->json([
           'message' => 'Successfully logged out',
-          'status' => true,
+          'success' => true,
         ]);
       return response()->json([
         'message' => 'Unsuccessfully logged out',
-        'status' => false,
+        'success' => false,
       ]);
     }
 
