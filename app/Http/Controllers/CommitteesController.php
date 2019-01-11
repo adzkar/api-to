@@ -6,9 +6,48 @@ use App\Committees;
 use App\Verification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\CommitteesResource as ComResource;
 
 class CommitteesController extends Controller
 {
+
+    public function getAll()
+    {
+      return ComResource::collection(Committees::paginate(10));
+    }
+
+    public function findById($id = null)
+    {
+      if($id == null)
+        return response()->json([
+          'message' => 'Id Missmatch',
+          'success' => true,
+        ]);
+      $par = Committees::find($id);
+      if($par == null)
+        return response()->json([
+          'message' => 'Not Found',
+          'success' => false
+        ]);
+        return new ComResource($par);
+    }
+
+    public function getByNum($id = null)
+    {
+      if($id == null)
+        return response()->json([
+          'message' => 'Id Missmatch',
+          'success' => true,
+        ], 204);
+      $par = Committees::All();
+      if($id < $par->count())
+        return new ComResource($par[$id]);
+      return response()->json([
+        'message' => 'Not Found',
+        'success' => false,
+      ]);
+    }
+
     public function register(Request $req)
     {
       $this->validate($req, [
@@ -87,4 +126,57 @@ class CommitteesController extends Controller
         'status' => false,
       ]);
     }
+
+    public function update(Request $req, $id = null)
+    {
+      if($id == null)
+        return response()->json([
+          'message' => 'Id Missmatch',
+          'errors' => 'Id Missing',
+        ], 404);
+      $par = Committees::find($id);
+      if(!$par)
+        return response()->json([
+          'message' => 'Id Committees '.$id.' not found',
+          'success' => false,
+        ], 404);
+        // $update = $ver->fill($req->all())->save();
+      $update = $par->update($req->all());
+      if ($update)
+          return response()->json([
+              'message' => 'Committees '.$id.' successfully updated',
+              'success' => true,
+          ], 201);
+      else
+          return response()->json([
+              'message' => 'Committees could not be updated',
+              'success' => false,
+          ], 500);
+    }
+
+    public function delete($id = null)
+    {
+      if($id == null)
+        return response()->json([
+          'message' => 'Id Missmatch',
+          'errors' => 'Id Missing',
+        ], 404);
+      $ver = Committees::find($id);
+      if(!$ver)
+        return response()->json([
+          'message' => 'Id Committees '.$id.' not found',
+          'success' => false,
+        ], 404);
+      if($ver->delete())
+          return response()->json([
+              'message' => 'Id Committees '.$id.' successfully deleted',
+              'success' => true,
+          ]);
+      else
+          return response()->json([
+              'message' => 'Committees could not be deleted',
+              'success' => false,
+          ], 500);
+    }
+
 }

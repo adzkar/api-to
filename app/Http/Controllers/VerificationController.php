@@ -81,10 +81,11 @@ class VerificationController extends Controller
       $ver = Verification::find($id);
       if(!$ver)
         return response()->json([
-          'success' => false,
           'message' => 'Id Verification '.$id.' not found',
+          'success' => false,
         ], 404);
-      $update = $ver->fill($req->all())->save();
+        // $update = $ver->fill($req->all())->save();
+      $update = $ver->update($req->all());
       if ($update)
           return response()->json([
               'message' => 'Verification code '.$id.' successfully updated',
@@ -117,8 +118,8 @@ class VerificationController extends Controller
           ]);
       else
           return response()->json([
+              'message' => 'Verification code could not be deleted',
               'success' => false,
-              'message' => 'Verification code could not be deleted'
           ], 500);
     }
 
