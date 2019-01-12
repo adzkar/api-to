@@ -23,33 +23,33 @@ Route::prefix('admin')->group(function() {
     Route::get('logout','AdminController@logout');
 
     Route::get('ver','VerificationController@getAll');
+    Route::post('ver', 'VerificationController@add');
 
     Route::prefix('ver')->group(function() {
-      Route::post('add', 'VerificationController@add');
       Route::get('find/{id?}', 'VerificationController@findById');
       Route::get('{id?}', 'VerificationController@getByNum');
       Route::put('update/{id?}', 'VerificationController@update');
-      Route::delete('delete/{id?}', 'VerificationController@delete');
+      Route::delete('{id}', 'VerificationController@delete');
     });
 
     Route::get('par', 'ParticipantsController@getAll');
+    Route::post('par', 'ParticipantsController@register');
 
     Route::prefix('par')->group(function() {
-      Route::post('add', 'ParticipantsController@register');
       Route::get('find/{id?}', 'ParticipantsController@findById');
       Route::get('{id?}', 'ParticipantsController@getByNum');
       Route::put('update/{id?}', 'ParticipantsController@update');
-      Route::delete('delete/{id?}', 'ParticipantsController@delete');
+      Route::delete('{id?}', 'ParticipantsController@delete');
     });
 
     Route::get('com', 'CommitteesController@getAll');
+    Route::post('com', 'CommitteesController@register');
 
     Route::prefix('com')->group(function() {
       Route::get('find/{id?}', 'CommitteesController@findById');
       Route::get('{id?}', 'CommitteesController@getByNum');
-      Route::post('add', 'CommitteesController@register');
       Route::put('update/{id?}', 'CommitteesController@update');
-      Route::delete('delete/{id?}', 'CommitteesController@delete');
+      Route::delete('{id?}', 'CommitteesController@delete');
     });
 
   });
@@ -63,10 +63,18 @@ Route::prefix('com')->group(function() {
   Route::post('login','CommitteesController@login');
 
   Route::middleware('auth:com')->group(function() {
+
     Route::get('detail','CommitteesController@detail');
     Route::get('logout','CommitteesController@logout');
 
-    
+    Route::get('tests', 'TestsController@index');
+    Route::post('tests', 'TestsController@store');
+
+    Route::prefix('tests')->group(function() {
+      Route::get('{id}', 'TestsController@show');
+      Route::put('{id}/update', 'TestsController@update');
+      Route::delete('{id}', 'TestsController@destroy');
+    });
 
   });
 
