@@ -92,6 +92,15 @@ Route::prefix('com')->group(function() {
         Route::delete('questions/{qid}', 'QuestionController@destroy');
         Route::get('questions', 'QuestionController@index');
         Route::get('questions/{qid}', 'QuestionController@show');
+
+        // Committees Answers Questions endpoint
+        Route::prefix('questions/{qid}')->group(function() {
+          Route::get('answers', 'AnswersController@index');
+          Route::get('answers/{aid}', 'AnswersController@show');
+          Route::post('answers','AnswersController@store');
+          Route::put('answers/{aid}','AnswersController@update');
+          Route::delete('answers/{aid}','AnswersController@destroy');
+        });
       });
 
     });

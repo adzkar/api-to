@@ -31,7 +31,7 @@ class QuestionController extends Controller
           return response()->json([
             'message' => 'Not found',
             'success' => false,
-          ]);
+          ], 404);
     }
 
     /**
