@@ -88,19 +88,19 @@ class TestsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $req, $id)
     {
-      $par = Tests::All()($id);
-      if(!$par)
+      $user = Auth::user();
+      if(!($id < $user->tests->count()))
         return response()->json([
           'message' => 'Id Test '.$id.' not found',
           'success' => false,
         ], 404);
-        // $update = $ver->fill($req->all())->save();
-      $update = $par->update($req->all());
+      $test = $user->tests[$id];
+      $update = $test->update($req->all());
       if ($update)
           return response()->json([
-              'message' => 'Id Test '.$id.' successfully updated',
+              'message' => 'Test successfully updated',
               'success' => true,
           ], 201);
       else
@@ -118,15 +118,16 @@ class TestsController extends Controller
      */
     public function destroy($id)
     {
-      $ver = Tests::All()[$id];
-      if(!$ver)
+      $user = Auth::user();
+      if(!($id < $user->tests->count()))
         return response()->json([
-          'message' => 'Id Participant '.$id.' not found',
+          'message' => 'Test not found',
           'success' => false,
         ], 404);
-      if($ver->delete())
+      $test = $user->tests[$id];
+      if($test->delete())
           return response()->json([
-              'message' => 'Id Participant '.$id.' successfully deleted',
+              'message' => 'Test successfully deleted',
               'success' => true,
           ]);
       else

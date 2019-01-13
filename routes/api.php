@@ -82,7 +82,7 @@ Route::prefix('com')->group(function() {
 
       // Committees Test end point
       Route::get('{id}', 'TestsController@show');
-      Route::put('{id}/update', 'TestsController@update');
+      Route::put('{id}', 'TestsController@update');
       Route::delete('{id}', 'TestsController@destroy');
 
       // Committees Question end point
