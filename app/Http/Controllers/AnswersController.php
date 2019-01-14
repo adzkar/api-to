@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Answers;
+use App\Images;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\AnswerResource as AnsRes;
@@ -78,18 +79,42 @@ class AnswersController extends Controller
           ], 404);
         $req->validate([
           'option' => 'required',
-          'status' => 'required|boolean'
+          'status' => 'required|boolean',
+          'image.file_name' => 'image|max:2048|mimes:jpeg,png,jpg|unique:images',
         ]);
         $save = Answers::create([
           'option' => $req->option,
           'status' => $req->status,
           'id_question' => $questions[$qid]->id_question,
         ]);
-        if($save)
+        if($save) {
+          // save images
+          $id_answer = $save->id_answer;
+          if($req->hasFile('image')) {
+            $tmp = $req->file('image');
+            $fileName = $tmp->getClientOriginalName();
+            Images::create([
+              'mime' => $tmp->getMimeType(),
+              'file_name' => $fileName,
+              'id_answer' => $id_answer,
+            ]);
+            if($tmp->move(public_path().'/images',$fileName))
+            return response()->json([
+              'message' => 'Answer Created',
+              'success' => true,
+            ], 201);
+            else
+            return response()->json([
+              'error' => 'Something went wrong',
+              'success' => false,
+            ], 500);
+          }
+
           return response()->json([
             'message' => 'Answer Created',
             'success' => true,
           ], 201);
+        }
         else
           return response()->json([
             'error' => 'Something went wrong',

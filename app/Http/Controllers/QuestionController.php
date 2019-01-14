@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Questions;
+use App\Images;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\QuestionResource as QuestRes;
@@ -51,16 +52,41 @@ class QuestionController extends Controller
         $test = $user->tests[$id];
         $req->validate([
           'content' => 'required',
+          'image.file_name' => 'image|max:2048|mimes:jpeg,png,jpg|unique:images'
         ]);
         $save = Questions::create([
           'content' => $req->content,
           'id_test' => $test->id_test,
         ]);
-        if($save)
+
+        if($save) {
+          // save images
+          $id_question = $save->id_question;
+          if($req->hasFile('image')) {
+            $tmp = $req->file('image');
+            $fileName = $tmp->getClientOriginalName();
+            Images::create([
+              'mime' => $tmp->getMimeType(),
+              'file_name' => $fileName,
+              'id_question' => $id_question,
+            ]);
+            if($tmp->move(public_path().'/images',$fileName))
+            return response()->json([
+              'message' => 'Question Created',
+              'success' => true,
+            ], 201);
+            else
+            return response()->json([
+              'error' => 'Something went wrong',
+              'success' => false,
+            ], 500);
+          }
+
           return response()->json([
             'message' => 'Question Created',
             'success' => true,
-          ]);
+          ], 201);
+        }
         else
           return response()->json([
             'error' => 'Something went wrong',

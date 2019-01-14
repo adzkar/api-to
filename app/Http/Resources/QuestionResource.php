@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\AnswerResource as AnsRes;
+use App\Http\Resources\ImageResource as ImgRes;
 
 class QuestionResource extends JsonResource
 {
@@ -17,9 +18,9 @@ class QuestionResource extends JsonResource
     {
         return [
           'id' => $this->id_question,
-          'test_title' => $this->test->title,
           'question' => $this->content,
           'answers' => AnsRes::collection($this->answers),
+          'images' => ImgRes::collection($this->images),
         ];
     }
 }

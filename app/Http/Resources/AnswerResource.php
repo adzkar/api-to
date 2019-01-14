@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\ImageResource as ImgRes;
 
 class AnswerResource extends JsonResource
 {
@@ -19,6 +20,7 @@ class AnswerResource extends JsonResource
           'id' => $this->id_answer,
           'option' => $this->option,
           'status' => ($this->status ? true:false),
+          'images' => ImgRes::collection($this->images),
         ];
     }
 }
