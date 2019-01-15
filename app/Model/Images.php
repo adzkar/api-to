@@ -8,7 +8,7 @@ class Images extends Model
 {
   protected $table = 'images';
   protected $primaryKey = 'id_image';
-  protected $fillable = ['mime','file_name','original_file_name','id_question','id_answer'];
+  protected $fillable = ['mime','image','id_question','id_answer'];
 
   public $timestamps = false;
 

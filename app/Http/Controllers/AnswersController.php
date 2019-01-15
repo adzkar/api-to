@@ -80,8 +80,24 @@ class AnswersController extends Controller
         $req->validate([
           'option' => 'required',
           'status' => 'required|boolean',
-          'image.file_name' => 'image|max:2048|mimes:jpeg,png,jpg|unique:images',
+          'image' => 'image|max:2048|mimes:jpeg,png,jpg|unique:images|nullable',
         ]);
+        
+        // Auth duplicate image
+        if($req->hasFile('image')) {
+          $tmp = $req->file('image');
+          $fileName = $tmp->getClientOriginalName();
+          // auth duplicate file name
+          $img = Images::where(['image' => $fileName])->first();
+          if($img)
+            return response()->json([
+              'message' => 'Invalid Image file name',
+              'errors' => [
+                  'image' => 'File name has already taken',
+                ]
+            ], 400);
+        }
+
         $save = Answers::create([
           'option' => $req->option,
           'status' => $req->status,
@@ -93,21 +109,21 @@ class AnswersController extends Controller
           if($req->hasFile('image')) {
             $tmp = $req->file('image');
             $fileName = $tmp->getClientOriginalName();
-            Images::create([
-              'mime' => $tmp->getMimeType(),
-              'file_name' => $fileName,
-              'id_answer' => $id_answer,
-            ]);
-            if($tmp->move(public_path().'/images',$fileName))
-            return response()->json([
-              'message' => 'Answer Created',
-              'success' => true,
-            ], 201);
-            else
-            return response()->json([
-              'error' => 'Something went wrong',
-              'success' => false,
-            ], 500);
+              Images::create([
+                'mime' => $tmp->getMimeType(),
+                'image' => $fileName,
+                'id_answer' => $id_answer,
+              ]);
+              if($tmp->move(public_path().'/images',$fileName))
+              return response()->json([
+                'message' => 'Answer Created',
+                'success' => true,
+              ], 201);
+              else
+              return response()->json([
+                'error' => 'Something went wrong',
+                'success' => false,
+              ], 500);
           }
 
           return response()->json([
