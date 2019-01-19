@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use App\Participants;
 use App\Verification;
 use Illuminate\Http\Request;
@@ -90,10 +91,18 @@ class ParticipantsController extends Controller
 
     public function login(Request $req)
     {
-      $this->validate($req, [
+      // $req->validate([
+      //   'username' => 'required',
+      //   'password' => 'required',
+      // ]);
+      $validator = Validator::make($req->all(), [
         'username' => 'required',
         'password' => 'required',
       ]);
+      if(count($validator->errors()))
+        return response()->json([
+          'error' => $validator->errors(),
+        ],401);
       $credential = [
         'username' => $req->username,
         'password' => md5($req->password),
@@ -106,11 +115,11 @@ class ParticipantsController extends Controller
             'success' => true,
             'token' => $token,
           ]);
-      } else
-          return response()->json([
-                  'error' => 'Invalid login',
-                  'success' => false,
-                ], 401);
+      }
+      return response()->json([
+              'success' => false,
+              'error' => 'Invalid login',
+            ], 401);
     }
 
     public function detail()
