@@ -120,6 +120,15 @@ Route::prefix('par')->group(function() {
   Route::middleware('auth:par')->group(function() {
     Route::get('detail','ParticipantsController@detail');
     Route::get('logout','ParticipantsController@logout');
+
+    // Test
+    Route::get('test', 'DoTestController@show');
+
+    Route::prefix('test')->group(function() {
+      Route::get('{id}', 'DoTestController@showByNum');
+      Route::post('{id}/start', 'DoTestController@start');
+    });
+
   });
 
 });
