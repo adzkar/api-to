@@ -9,7 +9,7 @@ class Tests extends Model
   protected $table = 'tests';
   protected $primaryKey = 'id_test';
   protected $fillable = [
-    'title','information','start','end','id_com','duration','true_value','empty_value','wrong_value'
+    'title','information','start','end','id_com','true_value','empty_value','wrong_value'
   ];
 
   public $timestamps = false;
