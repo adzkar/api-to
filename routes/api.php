@@ -127,6 +127,11 @@ Route::prefix('par')->group(function() {
     Route::prefix('test')->group(function() {
       Route::get('{id}', 'DoTestController@showByNum');
       Route::post('{id}/start', 'DoTestController@start');
+
+      Route::middleware('scopes:test')->group(function() {
+        Route::get('{id}/getQuestions/{qid?}', 'DoTestController@getQuestions');
+      });
+
     });
 
   });
