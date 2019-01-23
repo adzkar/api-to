@@ -101,6 +101,7 @@ class ParticipantsController extends Controller
       ]);
       if(count($validator->errors()))
         return response()->json([
+          'success' => false,
           'error' => $validator->errors(),
         ],401);
       $credential = [

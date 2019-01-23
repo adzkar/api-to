@@ -15,6 +15,8 @@ use App\DetailedResults;
 // Resource
 use App\Http\Resources\TestsParResource as TestsRes;
 use App\Http\Resources\QuestionResource as QuestRes;
+use App\Http\Resources\DetailResource as DetailRes;
+use App\Http\Resources\AnswerParResource as AnsRes;
 
 class DoTestController extends Controller
 {
@@ -79,9 +81,17 @@ class DoTestController extends Controller
         'date' => date('Y-m-d'),
         'status' => 'airing',
       ]);
+      // set questions and shuffle questions
+      $questions = $test->questions
+                        ->shuffle();
       // create detailed results
-      
-      // create personal token
+      for($i = 0;$i < $questions->count();$i++) {
+        $dr = new DetailedResults([
+          'id_result' => $save->id_result,
+        ]);
+        $dr->question()->associate($questions[$i])->save();
+      }
+      // // create personal token
       $token = $user->createToken('Test Token', [ 'test' ])
                     ->accessToken;
       // return token
@@ -122,10 +132,122 @@ class DoTestController extends Controller
           'success' => false,
           'message' => 'You haven\'t start the test',
         ],404);
-      $questions = $find->test->questions;
+      if(!($qid < $find->detail->count()))
+        return response()->json([
+          'success' => false,
+          'message' => 'Invalid id',
+        ], 404);
       if($qid != null)
-        return new QuestRes($questions[$qid]);
-      return QuestRes::collection($questions);
+        return new DetailRes($find->detail[$qid]);
+      return DetailRes::collection($find->detail);
+    }
+
+    public function getAnswers($id, $qid, $aid = null)
+    {
+      $user = Auth::user();
+      $tests = Tests::All();
+      if(!($id < $tests->count()))
+        return response()->json([
+          'success' => false,
+          'message' => 'Invalid id',
+        ], 404);
+      $test = $tests[$id];
+      if(!($test->start < date('Y-m-d H:i:s') && date('Y-m-d H:i:s') < $test->end))
+        return response()->json([
+          'success' => false,
+          'message' => 'The test has expired',
+        ], 401);
+      $find = [
+        'id_participant' => $user->id_participant,
+        'id_test' => $test->id_test,
+        'status' => 'airing',
+      ];
+      $find = Results::where($find)->first();
+      if(!$find)
+        return response()->json([
+          'success' => false,
+          'message' => 'You haven\'t start the test',
+        ],404);
+      if(!($qid < $find->detail->count()))
+        return response()->json([
+          'success' => false,
+          'message' => 'Invalid id',
+        ], 404);
+      if($aid != null)
+        return new AnsRes($find->detail[$qid]->question->answers[$aid]);
+      return AnsRes::collection($find->detail[$qid]->question->answers);
+    }
+
+    public function answer(Request $req, $id, $qid)
+    {
+      // Inital state
+      $user = Auth::user();
+      $tests = Tests::All();
+      // validation id
+      if(!($id < $tests->count()))
+        return response()->json([
+          'success' => false,
+          'message' => 'Invalid id',
+        ], 404);
+      $test = $tests[$id];
+      // validation test date
+      if(!($test->start < date('Y-m-d H:i:s') && date('Y-m-d H:i:s') < $test->end))
+        return response()->json([
+          'success' => false,
+          'message' => 'The test has expired',
+        ], 401);
+      // validation airing test
+      $find = [
+        'id_participant' => $user->id_participant,
+        'id_test' => $test->id_test,
+        'status' => 'airing',
+      ];
+      $find = Results::where($find)->first();
+      if(!$find)
+        return response()->json([
+          'success' => false,
+          'message' => 'You haven\'t start the test',
+        ],404);
+      // Init detail
+      $detail = $find->detail;
+      // qid validation
+      if(!($qid < $detail->count()))
+        return response()->json([
+          'success' => false,
+          'message' => 'Invalid Question ID',
+        ], 404);
+      // body validation
+      $valid = Validator::make($req->all(), [
+        'answer' => 'required|numeric'
+      ]);
+      if(count($valid->errors()))
+        return response()->json([
+          'success' => false,
+          'errors' => $valid->errors(),
+        ]);
+      // answer validation
+      $question = $detail[$qid]->question;
+      $answers = $question->answers;
+      if(!($req->answer < $answers->count()))
+        return response()->json([
+          'success' => false,
+          'message' => 'Invalid answer',
+        ], 404);
+      // insert answer
+      $detail = $detail[$qid];
+      $answer = $answers[$req->answer];
+
+      $detail->id_answer = $answer->id_answer;
+      $detail->status = $answer->status;
+      if($detail->save())
+        return response()->json([
+          'success' => true,
+          'message' => 'The answer submitted',
+        ], 201);
+      return response()->json([
+        'success' => false,
+        'message' => 'Internal Server Error'
+      ],500);
     }
 
 }
