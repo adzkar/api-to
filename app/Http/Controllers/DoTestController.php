@@ -17,6 +17,7 @@ use App\Http\Resources\TestsParResource as TestsRes;
 use App\Http\Resources\QuestionResource as QuestRes;
 use App\Http\Resources\DetailResource as DetailRes;
 use App\Http\Resources\AnswerParResource as AnsRes;
+use App\Http\Resources\ResultResource as ResRes;
 
 class DoTestController extends Controller
 {
@@ -248,6 +249,55 @@ class DoTestController extends Controller
         'success' => false,
         'message' => 'Internal Server Error'
       ],500);
+    }
+
+    public function finish($id)
+    {
+      // init
+      $user = Auth::user();
+      $tests = Tests::All();
+      // check id
+      if(!($id < $tests->count()))
+        return response()->json([
+          'success' => false,
+          'message' => 'Invalid id'
+        ], 404);
+      $test = $tests[$id];
+      $where = [
+        'id_participant' => $user->id_participant,
+        'id_test' => $test->id_test,
+        'status' => 'airing'
+      ];
+      $find = Results::where($where)->first();
+      if(!$find)
+        return response()->json([
+          'success' => false,
+          'message' => 'You haven\'t start the test',
+        ],404);
+      $find->status = 'aired';
+      if($find->save())
+        return response()->json([
+          'success' => true,
+          'message' => 'Test Finished'
+        ],201);
+      return response()->json([
+        'success' => false,
+        'message' => 'Internal server errors',
+      ], 500);
+    }
+
+    public function results($id = null)
+    {
+      // init
+      $user = Auth::user();
+      // find
+      $where = [
+        'status' => 'aired',
+        'id_participant' => $user->id_participant,
+      ];
+      $find = Results::where($where)->get();
+      return ResRes::collection($find);
+      // return $find;
     }
 
 }
