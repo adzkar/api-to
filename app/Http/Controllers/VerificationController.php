@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Verification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\VerificationResource as VerResource;
 
 class VerificationController extends Controller
@@ -100,18 +101,15 @@ class VerificationController extends Controller
 
     public function delete($id = null)
     {
-      if($id == null)
-        return response()->json([
-          'message' => 'Id Missmatch',
-          'errors' => 'Id Missing',
-        ], 404);
-      $ver = Verification::find($id);
-      if(!$ver)
+      // init
+      $ver = new Verification();
+      $ver = $ver::All();
+      if(!($id < $ver->count()))
         return response()->json([
           'success' => false,
           'message' => 'Id Verification '.$id.' not found',
         ], 404);
-      if($ver->delete())
+      if($ver[$id]->delete())
           return response()->json([
               'message' => 'Verification code '.$id.' successfully deleted',
               'success' => true,
