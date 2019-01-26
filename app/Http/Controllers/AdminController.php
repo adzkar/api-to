@@ -6,14 +6,21 @@ use App\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use Validator;
+
 class AdminController extends Controller
 {
     public function login(Request $req)
     {
-      $this->validate($req, [
+      $validator = Validator::make($req->all(), [
         'username' => 'required',
         'password' => 'required',
       ]);
+      if(count($validator->errors()))
+        return response()->json([
+          'success' => false,
+          'errors' => $validator->errors(),
+        ]);
       $credintial = [
         'username' => $req->username,
         'password' => md5($req->password),
