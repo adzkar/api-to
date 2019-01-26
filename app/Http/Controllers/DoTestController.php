@@ -297,7 +297,6 @@ class DoTestController extends Controller
       ];
       $find = Results::where($where)->get();
       return ResRes::collection($find);
-      // return $find;
     }
 
 }
