@@ -105,6 +105,17 @@ Route::prefix('com')->group(function() {
 
     });
 
+    // Admin Participants endpoint
+    Route::get('par', 'ParticipantsController@getAll');
+    Route::post('par', 'ParticipantsController@register');
+
+    Route::prefix('par')->group(function() {
+      Route::get('find/{id?}', 'ParticipantsController@findById');
+      Route::get('{id?}', 'ParticipantsController@getByNum');
+      Route::put('update/{id?}', 'ParticipantsController@update');
+      Route::delete('{id?}', 'ParticipantsController@delete');
+    });
+
   });
 
 });
