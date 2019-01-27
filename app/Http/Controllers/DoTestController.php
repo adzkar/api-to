@@ -310,4 +310,14 @@ class DoTestController extends Controller
       return ResRes::collection($find);
     }
 
+    public function allResults()
+    {
+      // find
+      $where = [
+        'status' => 'aired',
+      ];
+      $find = Results::where($where)->get();
+      return ResRes::collection($find);
+    }
+
 }

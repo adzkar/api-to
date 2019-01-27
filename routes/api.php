@@ -110,6 +110,9 @@ Route::prefix('com')->group(function() {
     Route::post('par', 'ParticipantsController@register');
 
     Route::prefix('par')->group(function() {
+      // Results
+      Route::get('results', 'DoTestController@allResults');
+
       Route::get('find/{id?}', 'ParticipantsController@findById');
       Route::get('{id?}', 'ParticipantsController@getByNum');
       Route::put('update/{id?}', 'ParticipantsController@update');

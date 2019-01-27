@@ -16,12 +16,16 @@ class ResultResource extends JsonResource
     {
         // init
         $test = $this->test;
+        $par = $this->participant;
 
         return [
           'title' => $test->title,
           'start' => $test->start,
           'end' => $test->end,
           'score' => $this->score,
+          'id_participant' => $par->id_participant,
+          'name' => $par->first_name.' '.$par->last_name,
+          'school' => $par->school,
         ];
     }
 }
