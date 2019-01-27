@@ -274,7 +274,18 @@ class DoTestController extends Controller
           'success' => false,
           'message' => 'You haven\'t start the test',
         ],404);
+      $detail = $find->detail;
+      $score = 0;
+      for ($i=0; $i < $detail->count(); $i++) {
+        if($detail[$i]->status === null)
+          $score += $test->empty_value;
+        if($detail[$i]->status === 0)
+          $score += $test->wrong_value;
+        if($detail[$i]->status === 1)
+          $score += $test->true_value;
+      }
       $find->status = 'aired';
+      $find->score = $score;
       if($find->save())
         return response()->json([
           'success' => true,
