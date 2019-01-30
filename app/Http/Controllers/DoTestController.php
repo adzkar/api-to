@@ -83,8 +83,8 @@ class DoTestController extends Controller
         'status' => 'airing',
       ]);
       // set questions and shuffle questions
-      $questions = $test->questions
-                        ->shuffle();
+      $questions = $test->questions;
+                        // ->shuffle();
       // create detailed results
       for($i = 0;$i < $questions->count();$i++) {
         $dr = new DetailedResults([
