@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\CommitteesResource as ComResource;
 
+use Validator;
+
 class CommitteesController extends Controller
 {
 
@@ -50,12 +52,17 @@ class CommitteesController extends Controller
 
     public function register(Request $req)
     {
-      $this->validate($req, [
+      $validator = Validator::make($req->all(), [
         'name' => 'required|string|max:20|min:1',
         'username' => 'required|string|max:20|min:1|unique:committees',
         'password' => 'required|min:6',
         'code' => 'required'
       ]);
+      if(count($validator->errors()))
+        return response()->json([
+          'success' => false,
+          'errors' => $validator->errors(),
+        ]);
       // Get verification id
       $ver = Verification::where(['code' => $req->code,'status' => 'c'])
              ->first();
