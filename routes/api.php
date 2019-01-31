@@ -149,7 +149,7 @@ Route::prefix('par')->group(function() {
       Route::middleware('scopes:test')->group(function() {
         Route::get('{id}/getQuestions/{qid?}', 'DoTestController@getQuestions');
         Route::get('{id}/getQuestions/{qid}/answers/{aid?}', 'DoTestController@getAnswers');
-        Route::put('{id}/getQuestions/{qid}/answers', 'DoTestController@answer');
+        Route::post('{id}/getQuestions/{qid}/answers', 'DoTestController@answer');
       });
 
     });

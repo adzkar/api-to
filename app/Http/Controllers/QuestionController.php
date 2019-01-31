@@ -44,7 +44,7 @@ class QuestionController extends Controller
     public function store(Request $req, $id)
     {
         $user = Auth::user();
-        if($id > $user->tests->count()-1)
+        if(!($id < $user->tests->count()))
           return response()->json([
             'message' => 'Not found',
             'success' => false,
@@ -65,21 +65,26 @@ class QuestionController extends Controller
           if($req->hasFile('image')) {
             $tmp = $req->file('image');
             $fileName = $tmp->getClientOriginalName();
-            Images::create([
+            $save = Images::create([
               'mime' => $tmp->getMimeType(),
-              'file_name' => $fileName,
+              'image' => $fileName,
               'id_question' => $id_question,
             ]);
+            if(!$save)
+              return response()->json([
+                'success' => false,
+                'message' => 'Failed to save images',
+              ], 400);
             if($tmp->move(public_path().'/images',$fileName))
-            return response()->json([
-              'message' => 'Question Created',
-              'success' => true,
-            ], 201);
+              return response()->json([
+                'message' => 'Question Created',
+                'success' => true,
+              ], 201);
             else
-            return response()->json([
-              'error' => 'Something went wrong',
-              'success' => false,
-            ], 500);
+              return response()->json([
+                'error' => 'Something went wrong',
+                'success' => false,
+              ], 500);
           }
 
           return response()->json([
