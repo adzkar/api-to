@@ -111,7 +111,7 @@ Route::prefix('com')->group(function() {
 
     Route::prefix('par')->group(function() {
       // Results
-      Route::get('results', 'DoTestController@allResults');
+      Route::get('results/{id?}', 'DoTestController@allResults');
 
       Route::get('find/{id?}', 'ParticipantsController@findById');
       Route::get('{id?}', 'ParticipantsController@getByNum');

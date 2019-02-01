@@ -184,6 +184,7 @@ class DoTestController extends Controller
       // Inital state
       $user = Auth::user();
       $tests = Tests::All();
+      // $test = Test::find($id);
       // validation id
       if(!($id < $tests->count()))
         return response()->json([
@@ -310,13 +311,15 @@ class DoTestController extends Controller
       return ResRes::collection($find);
     }
 
-    public function allResults()
+    public function allResults($id = null)
     {
       // find
       $where = [
         'status' => 'aired',
       ];
       $find = Results::where($where)->get();
+      if($id != null)
+        return new ResRes($find[$id]);
       return ResRes::collection($find);
     }
 
