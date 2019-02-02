@@ -11,6 +11,7 @@ use App\Tests;
 use App\Results;
 use App\Verification;
 use App\DetailedResults;
+use App\Participants;
 
 // Resource
 use App\Http\Resources\TestsParResource as TestsRes;
@@ -18,6 +19,7 @@ use App\Http\Resources\QuestionResource as QuestRes;
 use App\Http\Resources\DetailResource as DetailRes;
 use App\Http\Resources\AnswerParResource as AnsRes;
 use App\Http\Resources\ResultResource as ResRes;
+use App\Http\Resources\NewResultResource as NewRes;
 
 class DoTestController extends Controller
 {
@@ -313,14 +315,16 @@ class DoTestController extends Controller
 
     public function allResults($id = null)
     {
-      // find
-      $where = [
-        'status' => 'aired',
-      ];
-      $find = Results::where($where)->get();
+      $par = Participants::with([
+        'results' => function($query) {
+          $query->where(['status' => 'aired']);
+        }
+      ])
+      ->has('results')
+      ->get();
       if($id != null)
-        return new ResRes($find[$id]);
-      return ResRes::collection($find);
+        return new NewRes($par[$id]);
+      return NewRes::collection($par);
     }
 
 }
