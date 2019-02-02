@@ -219,14 +219,14 @@ class DoTestController extends Controller
           'message' => 'Invalid Question ID',
         ], 404);
       // body validation
-      $valid = Validator::make($req->all(), [
-        'answer' => 'required|numeric'
-      ]);
-      if(count($valid->errors()))
-        return response()->json([
-          'success' => false,
-          'errors' => $valid->errors(),
-        ]);
+      // $valid = Validator::make($req->all(), [
+      //   'answer' => 'required|numeric'
+      // ]);
+      // if(count($valid->errors()))
+      //   return response()->json([
+      //     'success' => false,
+      //     'errors' => $valid->errors(),
+      //   ]);
       // answer validation
       $question = $detail[$qid]->question;
       $answers = $question->answers;
