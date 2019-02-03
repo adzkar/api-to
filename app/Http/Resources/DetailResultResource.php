@@ -14,13 +14,10 @@ class DetailResultResource extends JsonResource
      */
     public function toArray($request)
     {
-        $test = $this->test;
         return [
           'id_result' => $this->id_result,
-          'title' => $test->title,
           'score' => $this->score,
-          'start' => $test->start,
-          'end' => $test->end,
+          'test' => $this->test,
         ];
     }
 }
