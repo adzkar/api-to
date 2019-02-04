@@ -321,7 +321,7 @@ class DoTestController extends Controller
         }
       ])
       ->has('results')
-      ->get();
+      ->paginate(10);
       if($id != null)
         return new NewRes($par[$id]);
       return NewRes::collection($par);
