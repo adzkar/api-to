@@ -143,8 +143,9 @@ Route::prefix('par')->group(function() {
 
       Route::get('{id}', 'DoTestController@showByNum');
       Route::post('{id}/start', 'DoTestController@start');
+      Route::post('{id}/start_off', 'DoTestController@startOffline');
       Route::post('{id}/finish', 'DoTestController@finish');
-
+      Route::post('{id}/finish_off', 'DoTestController@finishOffline');
 
       Route::middleware('scopes:test')->group(function() {
         Route::get('{id}/getQuestions/{qid?}', 'DoTestController@getQuestions');
