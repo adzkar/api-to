@@ -8,7 +8,7 @@ class DetailedResults extends Model
 {
   protected $table = 'detailed_results';
   protected $primaryKey = 'id_dr';
-  protected $fillable = ['status','id_result','id_question','id_answer'];
+  protected $fillable = ['status','id_result','id_question','id_answer','id_dr'];
 
   public $timestamps = false;
 

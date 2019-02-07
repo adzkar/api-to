@@ -166,14 +166,17 @@ class DoTestController extends Controller
       // // create personal token
       $token = $user->createToken('Test Token', [ 'test' ])
                     ->accessToken;
-      $data = DetailedResults::where(['id_result' => $save->id_result])
-              ->get();
+      $data = DetailedResults::where(['id_result' => $save->id_result]);
+      $answers = [];
+      for ($i=1; $i <= $data->count(); $i++) {
+        array_push($answers, [$i => null]);
+      }
       // return token
       if($token)
         return response()->json([
           'success' => true,
           'token' => $token,
-          'data' => $data
+          'data' => $answers
         ], 201);
       return response()->json([
         'success' => false,
@@ -395,30 +398,44 @@ class DoTestController extends Controller
           'success' => false,
           'message' => 'You haven\'t start the test',
         ],404);
-      $data = new DetailedResults();
-      $data->fill($req);
-      return $data;
-      // $detail = $find->detail;
-      // $score = 0;
-      // for ($i=0; $i < $detail->count(); $i++) {
-      //   if($detail[$i]->status === null)
-      //     $score += $test->empty_value;
-      //   if($detail[$i]->status === 0)
-      //     $score += $test->wrong_value;
-      //   if($detail[$i]->status === 1)
-      //     $score += $test->true_value;
-      // }
-      // $find->status = 'aired';
-      // $find->score = $score;
-      // if($find->save())
-      //   return response()->json([
-      //     'success' => true,
-      //     'message' => 'Test Finished'
-      //   ],201);
-      // return response()->json([
-      //   'success' => false,
-      //   'message' => 'Internal server errors',
-      // ], 500);
+
+      // init
+      $detail = $find->detail;
+      $req = $req->All();
+
+      // insert answer
+      for ($i=0; $i < $detail->count(); $i++) {
+        $question = $detail[$i]->question;
+        $answers = $question->answers;
+
+        if($req[$i][$i+1]) {
+          $detail[$i]->id_answer = $answers[$req[$i][$i+1]]->id_answer;
+          $detail[$i]->status = $answers[$req[$i][$i+1]]->status;
+          $detail[$i]->save();
+        }
+
+      }
+
+      $score = 0;
+      for ($i=0; $i < $detail->count(); $i++) {
+        if($detail[$i]->status === null)
+          $score += $test->empty_value;
+        if($detail[$i]->status === 0)
+          $score += $test->wrong_value;
+        if($detail[$i]->status === 1)
+          $score += $test->true_value;
+      }
+      $find->status = 'aired';
+      $find->score = $score;
+      if($find->save())
+        return response()->json([
+          'success' => true,
+          'message' => 'Test Finished'
+        ],201);
+      return response()->json([
+        'success' => false,
+        'message' => 'Internal server errors',
+      ], 500);
     }
 
     public function results($id = null)
