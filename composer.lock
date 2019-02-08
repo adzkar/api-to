@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fa89ce1b28fe5c7d55276f90bdda00eb",
+    "content-hash": "cde488edc5e9d98dbf27963638b7f172",
     "packages": [
         {
             "name": "defuse/php-encryption",
@@ -1872,49 +1872,6 @@
                 "php"
             ],
             "time": "2018-12-26T11:32:39+00:00"
-        },
-        {
-            "name": "odan/hydrator",
-            "version": "1.4.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/odan/hydrator.git",
-                "reference": "081fb80993e58aeca488f88e0e28572f4596725a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/odan/hydrator/zipball/081fb80993e58aeca488f88e0e28572f4596725a",
-                "reference": "081fb80993e58aeca488f88e0e28572f4596725a",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^6.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Odan\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "A high performance hydrator for PHP.",
-            "homepage": "https://github.com/odan/hydrator",
-            "keywords": [
-                "array",
-                "entity",
-                "hydration",
-                "hydrator",
-                "object",
-                "poco",
-                "popo"
-            ],
-            "time": "2018-03-10T08:38:44+00:00"
         },
         {
             "name": "opis/closure",
