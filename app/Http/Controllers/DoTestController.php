@@ -83,6 +83,7 @@ class DoTestController extends Controller
         'id_test' => $test->id_test,
         'date' => date('Y-m-d'),
         'status' => 'airing',
+        'score' => 0,
       ]);
       // set questions and shuffle questions
       $questions = $test->questions;
@@ -152,6 +153,7 @@ class DoTestController extends Controller
         'id_test' => $test->id_test,
         'date' => date('Y-m-d'),
         'status' => 'airing',
+        'score' => 0,
       ]);
       // set questions and shuffle questions
       $questions = $test->questions;
