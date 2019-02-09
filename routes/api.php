@@ -82,13 +82,15 @@ Route::prefix('com')->group(function() {
 
       // Committees Test end point
       Route::get('{id}', 'TestsController@show');
-      Route::put('{id}', 'TestsController@update');
+      // Route::put('{id}', 'TestsController@update');
+      Route::post('{id}/update', 'TestsController@update');
       Route::delete('{id}', 'TestsController@destroy');
 
       // Committees Question end point
       Route::prefix('{id}')->group(function() {
         Route::post('questions', 'QuestionController@store');
-        Route::put('questions/{qid}', 'QuestionController@update');
+        // Route::put('questions/{qid}', 'QuestionController@update');
+        Route::post('questions/{qid}/update', 'QuestionController@update');
         Route::delete('questions/{qid}', 'QuestionController@destroy');
         Route::get('questions', 'QuestionController@index');
         Route::get('questions/{qid}', 'QuestionController@show');
@@ -98,7 +100,8 @@ Route::prefix('com')->group(function() {
           Route::get('answers', 'AnswersController@index');
           Route::get('answers/{aid}', 'AnswersController@show');
           Route::post('answers','AnswersController@store');
-          Route::put('answers/{aid}','AnswersController@update');
+          // Route::put('answers/{aid}','AnswersController@update');
+          Route::post('answers/{aid}/update','AnswersController@update');
           Route::delete('answers/{aid}','AnswersController@destroy');
         });
       });
@@ -115,7 +118,8 @@ Route::prefix('com')->group(function() {
 
       Route::get('find/{id?}', 'ParticipantsController@findById');
       Route::get('{id?}', 'ParticipantsController@getByNum');
-      Route::put('update/{id?}', 'ParticipantsController@update');
+      // Route::put('update/{id?}', 'ParticipantsController@update');
+      Route::post('update/{id?}/update', 'ParticipantsController@update');
       Route::delete('{id?}', 'ParticipantsController@delete');
     });
 
