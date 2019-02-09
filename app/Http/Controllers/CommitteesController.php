@@ -66,6 +66,11 @@ class CommitteesController extends Controller
       // Get verification id
       $ver = Verification::where(['code' => $req->code,'status' => 'c'])
              ->first();
+     if(!$ver)
+       return response()->json([
+         'success' => false,
+         'error' => 'Invalid Verification code'
+       ]);
       if($ver) {
         $com = Committees::create([
                   'name' => $req->name,

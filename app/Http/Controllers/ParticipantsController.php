@@ -61,6 +61,11 @@ class ParticipantsController extends Controller
       // Get verification id
       $ver = Verification::where(['code' => $req->code,'status' => 'p'])
              ->first();
+      if(!$ver)
+        return response()->json([
+          'success' => false,
+          'error' => 'Invalid Verification code'
+        ]);
       if($ver) {
         $com = Participants::create([
                   'first_name' => $req->first_name,
