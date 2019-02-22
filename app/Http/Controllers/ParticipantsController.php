@@ -66,6 +66,12 @@ class ParticipantsController extends Controller
           'success' => false,
           'error' => 'Invalid Verification code'
         ]);
+      // check code test
+      if(!($ver->start < date('Y-m-d H:i:s') && date('Y-m-d H:i:s') < $ver->end))
+        return response()->json([
+          'success' => false,
+          'message' => 'The code has expired',
+        ], 401);
       if($ver) {
         $com = Participants::create([
                   'first_name' => $req->first_name,

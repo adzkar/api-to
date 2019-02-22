@@ -72,11 +72,17 @@ class DoTestController extends Controller
       // check validation code
       $ver = Verification::where([ 'code' => $req->code, 'status' => 't' ])
                            ->first();
-      if(!$ver)
-        return response()->json([
-          'success' => false,
-          'message' => 'Invalid Verification code',
-        ], 400);
+     if(!$ver)
+       return response()->json([
+         'success' => false,
+         'message' => 'Invalid Verification code',
+       ], 400);
+     // check code test
+     if(!($ver->start < date('Y-m-d H:i:s') && date('Y-m-d H:i:s') < $ver->end))
+       return response()->json([
+         'success' => false,
+         'message' => 'The code has expired',
+       ], 401);
       // create results
       $save = Results::Create([
         'id_participant' => $user->id_participant,
@@ -142,11 +148,17 @@ class DoTestController extends Controller
       // check validation code
       $ver = Verification::where([ 'code' => $req->code, 'status' => 't' ])
                            ->first();
-      if(!$ver)
-        return response()->json([
-          'success' => false,
-          'message' => 'Invalid Verification code',
-        ], 400);
+     if(!$ver)
+       return response()->json([
+         'success' => false,
+         'message' => 'Invalid Verification code',
+       ], 400);
+     // check code test
+     if(!($ver->start < date('Y-m-d H:i:s') && date('Y-m-d H:i:s') < $ver->end))
+       return response()->json([
+         'success' => false,
+         'message' => 'The code has expired',
+       ], 401);
       // create results
       $save = Results::Create([
         'id_participant' => $user->id_participant,
