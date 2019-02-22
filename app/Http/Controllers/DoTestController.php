@@ -467,4 +467,10 @@ class DoTestController extends Controller
       return NewRes::collection($par);
     }
 
+    public function allResPagination()
+    {
+      $find = Results::where(['status' => 'aired'])->get();
+      return ResRes::collection($find);
+    }
+
 }
