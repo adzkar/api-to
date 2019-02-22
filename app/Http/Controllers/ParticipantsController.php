@@ -53,7 +53,7 @@ class ParticipantsController extends Controller
       $this->validate($req, [
         'first_name' => 'required|string|max:20|min:1',
         'last_name' => 'required|string|max:20|min:1',
-        'username' => 'required|string|max:20|min:1|unique:participants',
+        'username' => 'required|string|min:1|unique:participants',
         'password' => 'required|min:6',
         'school' => 'required',
         'code' => 'required',
